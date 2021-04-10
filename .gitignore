@@ -1,0 +1,6 @@
+scout/__pycache__
+venv/
+bin/scout-cli/__pycache__
+bin/scout-cli/build 
+bin/scout-cli/dist 
+bin/scout-cli/scout-cli.spec
