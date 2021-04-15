@@ -1,3 +1,6 @@
+[![Build Status](https://api.travis-ci.com/cardinal-dev/scout.svg?branch=main)](https://travis-ci.com/cardinal-dev/scout)
+[![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
 <h1>scout</h1>
 <h3>Managing Autonomous Cisco APs</h3>
 
