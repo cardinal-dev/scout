@@ -4,7 +4,7 @@
 <h1>scout</h1>
 <h3>Managing Autonomous Cisco APs</h3>
 
-`scout` is the underlying logic that communicates with Autonomous Cisco APs via SSH. The main component of `scout`
+`scout` is the underlying logic that communicates with autonomous Cisco APs via SSH. The main component of `scout`
 is `paramiko`. `scout` is built on and requires Python3. `scout` and all other Cardinal components are tested
 against Python 3.6, 3.7, and 3.8.
 
@@ -24,13 +24,13 @@ Type "help", "copyright", "credits" or "license" for more information.
 `ssh` builds the `paramiko` client based on information passed into `buildSshClient()`. `buildSshClient()` accepts
 three positional arguments: `ip`, `username`, and `password`.
 
-`env` contains the Jinja2 logic for building/running scout templates. Currently, all default scout templates can
+`env` contains the Jinja2 logic for building/running `scout` templates. Currently, all default `scout` templates can
 be found in `templates/`. `scout` can read a text file that has one IOS command per line. If desired, 
 the user can pass Jinja2 values to the templates in order to build complex command runs.
 
 `info` contains command functions that gather Cisco AP information, much like the commands a sysadmin
 would type at the Terminal.
 
-`sys` contains command functions that manipulate certain system settings.
+`sys` contains command functions that manipulate system settings.
 
-`ssid` contains command functions that create/delete SSIDs on Cisco APs.
+`ssid` contains command functions that create/delete SSIDs.

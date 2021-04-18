@@ -26,6 +26,7 @@
 
 # Build scout-cli binary via pyinstaller
 
+pip install ../../.
 pyinstaller --onefile scout-cli.py
 mv dist/scout-cli /usr/bin
 rm -rf build/ dist/ scout-cli.spec
