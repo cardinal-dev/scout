@@ -24,24 +24,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# REQUIRES: ping, nc, snmpwalk, tftpd-hpa (or TFTP equivalent), sleep, 
+# REQUIRES: ping, nc, snmpwalk, tftpd-hpa (or TFTP equivalent), sleep
 
 # STATIC VARIABLES
 
-option=$1
+option="$1"
 
 checkConfigFile=$(ls ci.config)
 
 if [ "$checkConfigFile" = "ci.config" ]; then
     . ci.config
 else
-    apIp=$2
-    apUsername=$3
-    apPassword=$4
-    changeIp=$5
-    subnetMask=$6
+    apIp="$2"
+    apUsername="$3"
+    apPassword="$4"
+    changeIp="$5"
+    subnetMask="$6"
     # CI assumes tftpServer is on the execution machine
-    tftpServer=$7
+    tftpServer="$7"
+    radiusServer="$8"
+    sharedSecret="$9"
+    authPort="$10"
+    acctPort="$11"
+    radiusTimeout="$12"
 fi
 
 # Test scout operations
@@ -112,8 +117,8 @@ testScoutCreateSsid24() {
             echo "INFO: testScoutCreateSsid24() test passed!"
             scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTest 1 1 1
         else
-            echo "ERROR: testScoutCreateSsid24() test failed!"
             scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTest 1 1 1
+            echo "ERROR: testScoutCreateSsid24() test failed!"
             exit 1
         fi
     else
@@ -136,8 +141,8 @@ testScoutCreateSsid5() {
             echo "INFO: testScoutCreateSsid5() test passed!"
             scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 1 1 1
         else
-            echo "ERROR: testScoutCreateSsid5() test failed!"
             scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 1 1 1
+            echo "ERROR: testScoutCreateSsid5() test failed!"
             exit 1
         fi
     else
@@ -149,7 +154,7 @@ testScoutCreateSsid5() {
 testScoutCreateSsid24Radius() {
     # Test --create-ssid-radius-24
     echo "INFO: Running testScoutCreateSsid24Radius()..."
-    scout-cli --create-ssid-radius-24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1 1 192.168.2.4 test1234 1812 1813 30 EAP_GRP EAP_MTD
+    scout-cli --create-ssid-radius-24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1 1 "$radiusServer" "$sharedSecret" "$authPort" "$acctPort" "$radiusTimeout" EAP_GRP EAP_MTD
     return=$(echo $?)
 
     if [ "$return" = 0 ]; then
@@ -160,8 +165,8 @@ testScoutCreateSsid24Radius() {
             echo "INFO: testScoutCreateSsid24Radius() test passed!"
             scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1
         else
-            echo "ERROR: testScoutCreateSsid24Radius() test failed!"
             scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1
+            echo "ERROR: testScoutCreateSsid24Radius() test failed!"
             exit 1
         fi
     else
@@ -173,7 +178,7 @@ testScoutCreateSsid24Radius() {
 testScoutCreateSsid5Radius() {
     # Test --create-ssid-radius-5
     echo "INFO: Running testScoutCreateSsid5Radius()..."
-    scout-cli --create-ssid-radius-5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1 1 192.168.2.4 test1234 1812 1813 30 EAP_GRP EAP_MTD
+    scout-cli --create-ssid-radius-5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1 1 "$radiusServer" "$sharedSecret" "$authPort" "$acctPort" "$radiusTimeout" EAP_GRP EAP_MTD
     return=$(echo $?)
 
     if [ "$return" = 0 ]; then
@@ -184,8 +189,8 @@ testScoutCreateSsid5Radius() {
             echo "INFO: testScoutCreateSsid5Radius() test passed!"
             scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1
         else
-            echo "ERROR: testScoutCreateSsid5Radius() test failed!"
             scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1
+            echo "ERROR: testScoutCreateSsid5Radius() test failed!"
             exit 1
         fi
     else
@@ -490,10 +495,10 @@ elif [ "$option" == "--run-all-tests" ]; then
     testScoutPing
     echo "ALL TESTS PASSED"
 elif [ "$option" == "--run-test" ]; then
-    test=$2
-    apIp=$3
-    apUsername=$4
-    apPassword=$5
+    test="$2"
+    apIp="$3"
+    apUsername="$4"
+    apPassword="$5"
     "$2"
 else
     echo "ERROR: Please specify a valid option for scout-test."
