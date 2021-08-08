@@ -7,38 +7,101 @@ directly into the functions, `scout-cli` uses the `sys` module in order to gathe
 <h3>Usage:</h3>
 
 ~~~
-scout-cli: Cardinal CLI for Managing Cisco Access Points
-Usage:
-   scout-cli --get-arp: print access point ARP table
-   scout-cli --led: trigger LED function for 30 seconds
-   scout-cli --change-ip: change access point IP
-   scout-cli --create-ssid-24: create a 2.4GHz SSID
-   scout-cli --create-ssid-5: create a 5GHz SSID
-   scout-cli --create-ssid-radius-24: create a 2.4GHz RADIUS SSID
-   scout-cli --create-ssid-radius-5: create a 5GHz RADIUS SSID
-   scout-cli --delete-ssid-24: delete a 2.4GHz SSID/RADIUS SSID
-   scout-cli --delete-ssid-5: delete a 5GHz SSID/RADIUS SSID
-   scout-cli --disable-http: disable access point HTTP server
-   scout-cli --disable-snmp: disable access point SNMP function
-   scout-cli --enable-http: enable access point HTTP function
-   scout-cli --enable-snmp: enable access point SNMP function
-   scout-cli --get-speed: show access point link speed
-   scout-cli --tftp-backup: backup access point config via TFTP
-   scout-cli --wr: write configuration to access point
-   scout-cli --erase: erase configuration on access point
-   scout-cli --count-clients: fetch client associations on access point
-   scout-cli --get-name: fetch access point hostname
-   scout-cli --get-users: fetch access point users
-   scout-cli --get-mac: fetch access point MAC address
-   scout-cli --get-model: fetch access point model info
-   scout-cli --get-serial: fetch access point serial number
-   scout-cli --get-location: fetch access point location
-   scout-cli --get-ios-info: fetch access point IOS info
-   scout-cli --get-uptime: fetch access point uptime info
-   scout-cli --reboot: reboot access point
-   scout-cli --change-name: change access point hostname
-   scout-cli --run-fetcher: run scoutFetcher() from scout-cli
-   scout-cli --ping: ping an AP via SSH
+usage: scout-cli [-h] [--getArp <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getSpeed <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getName <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getUsers <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getMac <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getModel <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getSerial <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getLocation <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getIosInfo <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getUptime <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--getClientCount <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--ping <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--runFetcher <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--led <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--changeIp <IP_ADDRESS> <USERNAME> <PASSWORD> <NEW_IP> <SUBNET_MASK>]
+                 [--changeName <IP_ADDRESS> <USERNAME> <PASSWORD> <NEW_AP_NAME>]
+                 [--createSsid24 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <WPA2_PASSWORD> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID>]
+                 [--createSsid5 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <WPA2_PASSWORD> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID>]
+                 [--createSsidRadius24 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID> <RADIUS_IP> <SHARED_SECRET> <AUTH_PORT> <ACCT_PORT> <RADIUS_TIMEOUT> <RADIUS_GROUP> <METHOD_LIST>]
+                 [--createSsidRadius5 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID> <RADIUS_IP> <SHARED_SECRET> <AUTH_PORT> <ACCT_PORT> <RADIUS_TIMEOUT> <RADIUS_GROUP> <METHOD_LIST>]
+                 [--deleteSsid24 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <RADIO_ID> <INTERFACE_ID>]
+                 [--deleteSsid5 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <RADIO_ID> <INTERFACE_ID>]
+                 [--enableHttp <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--disableHttp <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--enableSnmp <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--disableSnmp <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--wr <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--erase <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--reboot <IP_ADDRESS> <USERNAME> <PASSWORD>]
+                 [--tftpBackup <IP_ADDRESS> <USERNAME> <PASSWORD> <TFTP_SERVER>]
+
+scout-cli: CLI for Managing Cisco Autonomous Access Points
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --getArp <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Print an access point's ARP table
+  --getSpeed <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's link speed
+  --getName <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's hostname
+  --getUsers <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show connected users
+  --getMac <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's MAC address
+  --getModel <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's model information
+  --getSerial <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's serial number
+  --getLocation <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's location
+  --getIosInfo <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's IOS information
+  --getUptime <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's system uptime
+  --getClientCount <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Show access point's client count
+  --ping <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Ping an access point via SSH
+  --runFetcher <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Fetch access point information via fetcher()
+  --led <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Trigger LED function for 30 seconds
+  --changeIp <IP_ADDRESS> <USERNAME> <PASSWORD> <NEW_IP> <SUBNET_MASK>
+                        Change an access point's IP address
+  --changeName <IP_ADDRESS> <USERNAME> <PASSWORD> <NEW_AP_NAME>
+                        Change an access point's hostname
+  --createSsid24 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <WPA2_PASSWORD> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID>
+                        Create a 2.4GHz SSID
+  --createSsid5 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <WPA2_PASSWORD> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID>
+                        Create a 5GHz SSID
+  --createSsidRadius24 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID> <RADIUS_IP> <SHARED_SECRET> <AUTH_PORT> <ACCT_PORT> <RADIUS_TIMEOUT> <RADIUS_GROUP> <METHOD_LIST>
+                        Create a 2.4GHz 802.1x SSID
+  --createSsidRadius5 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <BRIDGE_GROUP_ID> <RADIO_ID> <INTERFACE_ID> <RADIUS_IP> <SHARED_SECRET> <AUTH_PORT> <ACCT_PORT> <RADIUS_TIMEOUT> <RADIUS_GROUP> <METHOD_LIST>
+                        Create a 5GHz 802.1x SSID
+  --deleteSsid24 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <RADIO_ID> <INTERFACE_ID>
+                        Delete a 2.4GHz SSID
+  --deleteSsid5 <IP_ADDRESS> <USERNAME> <PASSWORD> <SSID_NAME> <VLAN_ID> <RADIO_ID> <INTERFACE_ID>
+                        Delete a 5GHz SSID
+  --enableHttp <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Enable an access point's HTTP server
+  --disableHttp <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Disable an access point's HTTP server
+  --enableSnmp <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Enable access point's SNMP server
+  --disableSnmp <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Disable access point's SNMP server
+  --wr <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Write configuration to access point
+  --erase <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Erase an access point's configuration
+  --reboot <IP_ADDRESS> <USERNAME> <PASSWORD>
+                        Reboot an access point
+  --tftpBackup <IP_ADDRESS> <USERNAME> <PASSWORD> <TFTP_SERVER>
+                        Backup an access point's configuration via TFTP
 ~~~
 
 Every parameter in `scout-cli` requires three arguments: `ip`, `username`, and `password`.
@@ -48,11 +111,11 @@ on the option specified.
 <h3>Example</h3>
 
 ~~~
-scout-cli --get-arp <CISCO_AP_IP> <USERNAME> <PASSWORD>
+scout-cli --getArp <IP_ADDRESS> <USERNAME> <PASSWORD>
 ~~~
 
 ~~~
-scout-cli --get-arp 192.168.2.100 cisco1 mysecretpass
+scout-cli --getArp 192.168.2.100 cisco1 mysecretpass
 Protocol  Address          Age (min)  Hardware Addr   Type   Interface
 Internet  192.168.2.1             0   ec1a.5986.2510  ARPA   BVI1
 Internet  192.168.2.3             1   7ce9.d306.090c  ARPA   BVI1

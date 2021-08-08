@@ -30,8 +30,6 @@ import os
 import jinja2
 from configparser import ConfigParser
 
-# SCOUT SETTINGS
-
 def scoutEnv():
     scoutConfigFile = os.environ['SCOUTCONFIG']
     scoutConfig = ConfigParser()

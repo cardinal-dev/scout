@@ -1,5 +1,4 @@
 # Common paths
-
 scout/__pycache__
 venv/
 bin/scout-cli/__pycache__

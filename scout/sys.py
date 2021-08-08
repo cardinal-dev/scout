@@ -30,24 +30,24 @@ import scout.ssh
 import scout.env
 import time
 
-# SCOUT SYS COMMAND FUNCTIONS
-
 def scoutLed(ip, username, password):
-    """Function that opens a SSH connection to the AP
+    '''
+    Function that opens a SSH connection to the AP
     and runs led flash 30.
-    """
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     print("INFO: Flashing pretty lights on {}...".format(ip))
     stdin, stdout, stderr = scoutSshClient.exec_command("led flash 30\n")
     scoutSshClient.close()
 
 def scoutChangeIp(ip, username, password, newIp, subnetMask):
-    """Function that identifies SSH info, collects sys args,
+    '''
+    Function that identifies SSH info, collects sys args,
     calls the scout_change_ap_ip command set, opens a SSH connection
     to the AP, executes the IP change, terminates the old SSH connection,
     opens a new one, and runs the scout_do_wr command set to save new IP
     change.
-    """
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     jinjaEnv = scout.env.scoutJinjaEnv()
     commandDebug = scout.env.scoutEnv()

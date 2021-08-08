@@ -11,12 +11,16 @@ against Python 3.6, 3.7, and 3.8.
 <h3>Example Usage:</h3>
 
 ~~~
-Python 3.6.9 (default, Oct  8 2020, 12:12:24) 
+Python 3.6.9 (default, Jan 26 2021, 15:33:00) 
 [GCC 8.4.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from scout import info
->>> info.scoutGetUsers("192.168.2.5", "Cisco", "Cisco")
-'    Line       User       Host(s)              Idle       Location\n*  1 vty 0     Cisco      idle                 00:00:00 debian-1\n\n  Interface    User               Mode         Idle     Peer Address\n'
+>>> users = info.getUsers("192.168.2.5", "Cisco", "Cisco")
+>>> print(users)
+    Line       User       Host(s)              Idle       Location
+*  1 vty 0     Cisco      idle                 00:00:00 test-sys-1
+
+  Interface    User               Mode         Idle     Peer Address
 ~~~
 
 `scout` is a Python package that contains five modules:
