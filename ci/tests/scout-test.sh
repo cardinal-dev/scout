@@ -62,7 +62,7 @@ scoutTestUsage() {
 testScoutGetArp() {
     # Test --get-arp
     echo "INFO: Running testScoutGetArp()..."
-    scout-cli --get-arp "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getArp "$apIp" "$apUsername" "$apPassword"
     return=$(echo $?)
     if [ "$return" = 0 ]; then
         echo "INFO: testScoutGetArp() test passed!"
@@ -90,10 +90,10 @@ testScoutLed() {
 testScoutChangeIp() {
     # Test --change-ip
     echo "INFO: Running testScoutChangeIp()..."
-    scout-cli --change-ip "$apIp" "$apUsername" "$apPassword" "$changeIp" "$subnetMask"
+    scout-cli --changeIp "$apIp" "$apUsername" "$apPassword" "$changeIp" "$subnetMask"
     ping -c 4 "$changeIp"
     pingReturn=$(echo $?)
-    scout-cli --change-ip "$changeIp" "$apUsername" "$apPassword" "$apIp" "$subnetMask"
+    scout-cli --changeIp "$changeIp" "$apUsername" "$apPassword" "$apIp" "$subnetMask"
     revertReturn=$(echo $?)
     if [ "$pingReturn" = 0 ] && [ "$revertReturn" = 0 ]; then
         echo "INFO: testScoutChangeIp() test passed!"
@@ -106,7 +106,7 @@ testScoutChangeIp() {
 testScoutCreateSsid24() {
     # Test --create-ssid-24
     echo "INFO: Running testScoutCreateSsid24()..."
-    scout-cli --create-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTest test1234 1 1 1 1
+    scout-cli --createSsid24 "$apIp" "$apUsername" "$apPassword" ScoutTest test1234 1 1 1 1
     return=$(echo $?)
 
     if [ "$return" = 0 ]; then
@@ -115,9 +115,9 @@ testScoutCreateSsid24() {
         broadcastTest=$(echo $?)
         if [ "$broadcastTest" = 0 ]; then
             echo "INFO: testScoutCreateSsid24() test passed!"
-            scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTest 1 1 1
+            scout-cli --deleteSsid24 "$apIp" "$apUsername" "$apPassword" ScoutTest 1 1 1
         else
-            scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTest 1 1 1
+            scout-cli --deleteSsid24 "$apIp" "$apUsername" "$apPassword" ScoutTest 1 1 1
             echo "ERROR: testScoutCreateSsid24() test failed!"
             exit 1
         fi
@@ -130,7 +130,7 @@ testScoutCreateSsid24() {
 testScoutCreateSsid5() {
     # Test --create-ssid-5
     echo "INFO: Running testScoutCreateSsid5()..."
-    scout-cli --create-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 test1234 1 1 1 1
+    scout-cli --createSsid5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 test1234 1 1 1 1
     return=$(echo $?)
 
     if [ "$return" = 0 ]; then
@@ -139,9 +139,9 @@ testScoutCreateSsid5() {
         broadcastTest=$(echo $?)
         if [ "$broadcastTest" = 0 ]; then
             echo "INFO: testScoutCreateSsid5() test passed!"
-            scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 1 1 1
+            scout-cli --deleteSsid5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 1 1 1
         else
-            scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 1 1 1
+            scout-cli --deleteSsid5 "$apIp" "$apUsername" "$apPassword" ScoutTest5 1 1 1
             echo "ERROR: testScoutCreateSsid5() test failed!"
             exit 1
         fi
@@ -154,7 +154,7 @@ testScoutCreateSsid5() {
 testScoutCreateSsid24Radius() {
     # Test --create-ssid-radius-24
     echo "INFO: Running testScoutCreateSsid24Radius()..."
-    scout-cli --create-ssid-radius-24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1 1 "$radiusServer" "$sharedSecret" "$authPort" "$acctPort" "$radiusTimeout" EAP_GRP EAP_MTD
+    scout-cli --createSsidRadius24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1 1 "$radiusServer" "$sharedSecret" "$authPort" "$acctPort" "$radiusTimeout" EAP_GRP EAP_MTD
     return=$(echo $?)
 
     if [ "$return" = 0 ]; then
@@ -163,9 +163,9 @@ testScoutCreateSsid24Radius() {
         broadcastTest=$(echo $?)
         if [ "$broadcastTest" = 0 ]; then
             echo "INFO: testScoutCreateSsid24Radius() test passed!"
-            scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1
+            scout-cli --deleteSsid24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1
         else
-            scout-cli --delete-ssid-24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1
+            scout-cli --deleteSsid24 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius 1 1 1
             echo "ERROR: testScoutCreateSsid24Radius() test failed!"
             exit 1
         fi
@@ -178,7 +178,7 @@ testScoutCreateSsid24Radius() {
 testScoutCreateSsid5Radius() {
     # Test --create-ssid-radius-5
     echo "INFO: Running testScoutCreateSsid5Radius()..."
-    scout-cli --create-ssid-radius-5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1 1 "$radiusServer" "$sharedSecret" "$authPort" "$acctPort" "$radiusTimeout" EAP_GRP EAP_MTD
+    scout-cli --createSsidRadius5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1 1 "$radiusServer" "$sharedSecret" "$authPort" "$acctPort" "$radiusTimeout" EAP_GRP EAP_MTD
     return=$(echo $?)
 
     if [ "$return" = 0 ]; then
@@ -187,9 +187,9 @@ testScoutCreateSsid5Radius() {
         broadcastTest=$(echo $?)
         if [ "$broadcastTest" = 0 ]; then
             echo "INFO: testScoutCreateSsid5Radius() test passed!"
-            scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1
+            scout-cli --deleteSsid5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1
         else
-            scout-cli --delete-ssid-5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1
+            scout-cli --deleteSsid5 "$apIp" "$apUsername" "$apPassword" ScoutTestRadius5 1 1 1
             echo "ERROR: testScoutCreateSsid5Radius() test failed!"
             exit 1
         fi
@@ -202,12 +202,12 @@ testScoutCreateSsid5Radius() {
 testScoutHttp() {
     # Test --disable-http
     echo "INFO: Running testScoutHttp()..."
-    scout-cli --enable-http "$apIp" "$apUsername" "$apPassword"
+    scout-cli --enableHttp "$apIp" "$apUsername" "$apPassword"
     testEnableHttp=$(nc -vz "$apIp" 80)
     enableHttpRc=$(echo $?)
     if [ "$enableHttpRc" = 0 ]; then
         echo "INFO: --enable-http test passed!"
-        scout-cli --disable-http "$apIp" "$apUsername" "$apPassword"
+        scout-cli --disableHttp "$apIp" "$apUsername" "$apPassword"
         testDisableHttp=$(nc -vz "$apIp" 80)
         disableHttpRc=$(echo $?)
         if [ "$disableHttpRc" = 1 ]; then
@@ -227,12 +227,12 @@ testScoutHttp() {
 testScoutSnmp() {
     # Test --disable-snmp
     echo "INFO: Running testScoutSnmp()..."
-    scout-cli --enable-snmp "$apIp" "$apUsername" "$apPassword" public
+    scout-cli --enableSnmp "$apIp" "$apUsername" "$apPassword" public
     snmpwalk -v2c -c public "$apIp"
     enableSnmpRc=$(echo $?)
     if [ "$enableSnmpRc" = 0 ]; then
         echo "INFO: --enable-snmp test passed!"
-        scout-cli --disable-snmp "$apIp" "$apUsername" "$apPassword"
+        scout-cli --disableSnmp "$apIp" "$apUsername" "$apPassword"
         snmpwalk -v2c -c public "$apIp"
         disableSnmpRc=$(echo $?)
         if [ "$disableSnmpRc" = 1 ]; then
@@ -252,7 +252,7 @@ testScoutSnmp() {
 testScoutGetSpeed() {
     # Test --get-speed
     echo "INFO: Running testScoutGetSpeed()..."
-    scout-cli --get-speed "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getSpeed "$apIp" "$apUsername" "$apPassword"
     getSpeedRc=$(echo $?)
     if [ "$getSpeedRc" = 0 ]; then
         echo "INFO: --get-speed test passed!"
@@ -265,8 +265,8 @@ testScoutGetSpeed() {
 testScoutTftpBackup() {
     # Test --tftp-backup
     echo "INFO: Running testScoutTftpBackup()..."
-    apName=$(scout-cli --get-name "$apIp" "$apUsername" "$apPassword")
-    scout-cli --tftp-backup "$apIp" "$apUsername" "$apPassword" "$tftpServer"
+    apName=$(scout-cli --getName "$apIp" "$apUsername" "$apPassword")
+    scout-cli --tftpBackup "$apIp" "$apUsername" "$apPassword" "$tftpServer"
     checkTftpBackup=$(ls -lah /var/lib/tftpboot/*-confg | grep --ignore-case "$apName")
     tftpBackupRc=$(echo $?)
     if [ "$tftpBackupRc" = 0 ]; then
@@ -293,7 +293,7 @@ testScoutWr() {
 testScoutCountClients() {
     # Test --count-clients
     echo "INFO: Running testScoutCountClients()..."
-    scout-cli --count-clients "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getClientCount "$apIp" "$apUsername" "$apPassword"
     countClientsRc=$(echo $?)
     if [ "$countClientsRc" = 0 ]; then
         echo "INFO: --count-clients test passed!"
@@ -306,7 +306,7 @@ testScoutCountClients() {
 testScoutGetName() {
     # Test --get-name
     echo "INFO: Running testScoutGetName()..."
-    scout-cli --get-name "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getName "$apIp" "$apUsername" "$apPassword"
     getNameRc=$(echo $?)
     if [ "$getNameRc" = 0 ]; then
         echo "INFO: --get-name test passed!"
@@ -319,7 +319,7 @@ testScoutGetName() {
 testScoutGetUsers() {
     # Test --get-users
     echo "INFO: Running testScoutGetUsers()..."
-    scout-cli --get-users "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getUsers "$apIp" "$apUsername" "$apPassword"
     getUsersRc=$(echo $?)
     if [ "$getUsersRc" = 0 ]; then
         echo "INFO: --get-users test passed!"
@@ -332,7 +332,7 @@ testScoutGetUsers() {
 testScoutGetMac() {
     # Test --get-mac
     echo "INFO: Running testScoutGetMac()..."
-    scout-cli --get-mac "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getMac "$apIp" "$apUsername" "$apPassword"
     getMacRc=$(echo $?)
     if [ "$getMacRc" = 0 ]; then
         echo "INFO: --get-mac test passed!"
@@ -345,7 +345,7 @@ testScoutGetMac() {
 testScoutGetModel() {
     # Test --get-model
     echo "INFO: Running testScoutGetModel()..."
-    scout-cli --get-model "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getModel "$apIp" "$apUsername" "$apPassword"
     getModelRc=$(echo $?)
     if [ "$getModelRc" = 0 ]; then
         echo "INFO: --get-model test passed!"
@@ -358,7 +358,7 @@ testScoutGetModel() {
 testScoutGetSerial() {
     # Test --get-serial
     echo "INFO: Running testScoutGetSerial()..."
-    scout-cli --get-serial "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getSerial "$apIp" "$apUsername" "$apPassword"
     getSerialRc=$(echo $?)
     if [ "$getSerialRc" = 0 ]; then
         echo "INFO: --get-serial test passed!"
@@ -371,7 +371,7 @@ testScoutGetSerial() {
 testScoutGetLocation() {
     # Test --get-location
     echo "INFO: Running testScoutGetLocation()..."
-    scout-cli --get-location "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getLocation "$apIp" "$apUsername" "$apPassword"
     getLocationRc=$(echo $?)
     if [ "$getLocationRc" = 0 ]; then
         echo "INFO: --get-location test passed!"
@@ -384,7 +384,7 @@ testScoutGetLocation() {
 testScoutGetIosInfo() {
     # Test --get-ios-info
     echo "INFO: Running testScoutIosInfo()..."
-    scout-cli --get-ios-info "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getIosInfo "$apIp" "$apUsername" "$apPassword"
     getIosInfoRc=$(echo $?)
     if [ "$getIosInfoRc" = 0 ]; then
         echo "INFO: --get-ios-info test passed!"
@@ -397,7 +397,7 @@ testScoutGetIosInfo() {
 testScoutGetUptime() {
     # Test --get-uptime
     echo "INFO: Running testScoutGetUptime()..."
-    scout-cli --get-uptime "$apIp" "$apUsername" "$apPassword"
+    scout-cli --getUptime "$apIp" "$apUsername" "$apPassword"
     getUptimeRc=$(echo $?)
     if [ "$getUptimeRc" = 0 ]; then
         echo "INFO: --get-uptime test passed!"
@@ -425,23 +425,23 @@ testScoutReboot() {
 testScoutChangeName() {
     # Test --change-name
     echo "INFO: Running testScoutChangeName()..."
-    oldHostname=$(scout-cli --get-name "$apIp" "$apUsername" "$apPassword")
-    scout-cli --change-name "$apIp" "$apUsername" "$apPassword" scoutTest
-    newHostname=$(scout-cli --get-name "$apIp" "$apUsername" "$apPassword")
+    oldHostname=$(scout-cli --getName "$apIp" "$apUsername" "$apPassword")
+    scout-cli --changeName "$apIp" "$apUsername" "$apPassword" scoutTest
+    newHostname=$(scout-cli --getName "$apIp" "$apUsername" "$apPassword")
     if [ "$newHostname" = "scoutTest" ]; then
         echo "INFO: --change-name test passed!"
     else
         echo "INFO: --change-name test failed!"
         exit 1
     fi
-    scout-cli --change-name "$apIp" "$apUsername" "$apPassword" "$oldHostname"
+    scout-cli --changeName "$apIp" "$apUsername" "$apPassword" "$oldHostname"
 }
 
 testScoutRunFetcher() {
     # Test --run-fetcher
     echo "INFO: Running testScoutRunFetcher()..."
     for i in {1..5}; do
-        scout-cli --run-fetcher "$apIp" "$apUsername" "$apPassword"
+        scout-cli --runFetcher "$apIp" "$apUsername" "$apPassword"
         fetcherRc=$(echo $?)
         if [ "$fetcherRc" = 0 ]; then
             echo "INFO: --run-fetcher test passed!"

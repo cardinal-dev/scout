@@ -28,10 +28,8 @@ SOFTWARE.
 
 import paramiko
 
-# SSH INFORMATION
-
 def buildSshClient(ip, username, password):
-    """Build SSH client based on scout configuration"""
+    """Build SSH client based on scout configuration."""
     scoutSshClient = paramiko.SSHClient()
     scoutSshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     scoutSshClient.connect(ip, port=22, username=username, password=password, look_for_keys=False, allow_agent=False)
