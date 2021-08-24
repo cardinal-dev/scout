@@ -28,9 +28,17 @@ SOFTWARE.
 
 import paramiko
 
-def buildSshClient(ip, username, password):
-    """Build SSH client based on scout configuration."""
-    scoutSshClient = paramiko.SSHClient()
-    scoutSshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    scoutSshClient.connect(ip, port=22, username=username, password=password, look_for_keys=False, allow_agent=False)
-    return scoutSshClient
+class scoutSshClient():
+    '''
+    Object used to build a SSH client based on paramiko
+    '''
+    def build(self, ip, username, password, port, **kwargs):
+        """Build SSH client based on scout configuration."""
+
+        # Invoke paramiko.SSHClient()
+        scoutSshClient = paramiko.SSHClient()
+
+        # Read in customizations from scout.ini
+        ingestIni = ConfigParser()
+        scoutSshClient.connect(ip, port=port, username=username, password=password, look_for_keys=False, allow_agent=False)
+        return scoutSshClient
