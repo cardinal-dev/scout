@@ -38,7 +38,7 @@ class scoutEnv():
     options, which will be ingested on execution.
     '''
 
-    def __init__(self, **kwargs):
+    def __init__(self):
 
         # Ingest values from config file at SCOUTCONFIG
         scoutConfigFile = os.environ['SCOUTCONFIG']
@@ -47,42 +47,33 @@ class scoutEnv():
 
         self.tunings = {}
 
-        # By default, let's look at config file at SCOUTCONFIG first
-        commandDebug = scoutConfig.get('scout', 'commandDebug')
-        commandDir = scoutConfig.get('scout', 'commandDir')
-
-        fileLoader = jinja2.FileSystemLoader("{0}".format(commandDir))
-        # autoescape is set to True for security purposes
-        jinjaEnv = jinja2.Environment(loader=fileLoader, autoescape=True)
-
         # Establish default behavior. If values are not defined
         # in SCOUTCONFIG, we'll try to handle accordingly.
-        if len(commandDebug) <= 0:
-            self.tunings['commandDebug'] = 'off'
+        if scoutConfig.has_option('scout', 'commandDir'):
+            self.tunings['commandDir'] = scoutConfig.get('scout', 'commandDir')
         else:
-            self.tunings['commandDebug'] = commandDebug
-
-        if len(commandDir) <= 0:
             self.tunings['commandDir'] = '/opt/scout/templates'
+
+        if scoutConfig.has_option('scout', 'commandDebug'):
+            self.tunings['commandDebug'] = scoutConfig.get('scout', 'commandDebug')
         else:
-            self.tunings['commandDir'] = commandDir
+            self.tunings['commandDebug'] = 'off'
+
+        fileLoader = jinja2.FileSystemLoader("{0}".format(self.tunings['commandDir']))
+        # See: https://bandit.readthedocs.io/en/latest/plugins/b701_jinja2_autoescape_false.html
+        jinjaEnv = jinja2.Environment(loader=fileLoader, autoescape=True)
 
         # Embed Jinja2 object into tunings dict()
         self.tunings['jinjaEnv'] = jinjaEnv
 
-        # Accommodate for a wide array of key/value pairs
-        for d in kwargs.items():
-            self.tunings[d[0]] = d[1]
-
-    def ssh(self, ip, username, password, port, **kwargs):
+    def ssh(self, host, username, password, port, **kwargs):
         '''
         Build SSH client using paramiko.
         '''
         # Invoke paramiko to start building SSH client
         scoutSshClient = paramiko.SSHClient()
 
-        # Read in customizations from scout.ini
-        scoutSshClient.connect(ip, port=port, username=username, password=password, look_for_keys=False, allow_agent=False)
+        scoutSshClient.connect(host, port=port, username=username, password=password, **kwargs)
         return scoutSshClient
 
     def list(self):
