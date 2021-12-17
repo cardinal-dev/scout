@@ -42,38 +42,52 @@ class scoutEnv():
 
         # Ingest values from config file at SCOUTCONFIG
         scoutConfigFile = os.environ['SCOUTCONFIG']
-        scoutConfig = ConfigParser()
-        scoutConfig.read("{0}".format(scoutConfigFile))
+        self.scoutConfig = ConfigParser()
+        self.scoutConfig.read(scoutConfigFile)
 
+        # Create dict() to hold tuning values
         self.tunings = {}
 
         # Establish default behavior. If values are not defined
         # in SCOUTCONFIG, we'll try to handle accordingly.
-        if scoutConfig.has_option('scout', 'commandDir'):
-            self.tunings['commandDir'] = scoutConfig.get('scout', 'commandDir')
+        if self.scoutConfig.has_option('scout', 'commandDir'):
+            self.tunings['commandDir'] = self.scoutConfig.get('scout', 'commandDir')
         else:
             self.tunings['commandDir'] = '/opt/scout/templates'
 
-        if scoutConfig.has_option('scout', 'commandDebug'):
-            self.tunings['commandDebug'] = scoutConfig.get('scout', 'commandDebug')
+        if self.scoutConfig.has_option('scout', 'commandDebug'):
+            self.tunings['commandDebug'] = self.scoutConfig.get('scout', 'commandDebug')
         else:
             self.tunings['commandDebug'] = 'off'
 
-        fileLoader = jinja2.FileSystemLoader("{0}".format(self.tunings['commandDir']))
+        fileLoader = jinja2.FileSystemLoader(self.tunings['commandDir'])
         # See: https://bandit.readthedocs.io/en/latest/plugins/b701_jinja2_autoescape_false.html
         jinjaEnv = jinja2.Environment(loader=fileLoader, autoescape=True)
 
         # Embed Jinja2 object into tunings dict()
         self.tunings['jinjaEnv'] = jinjaEnv
 
-    def ssh(self, host, username, password, port, **kwargs):
+    def ssh(self, host, username, password, port, **sshArgs):
         '''
         Build SSH client using paramiko.
         '''
+        # Look through SCOUTCONFIG and append any special args
+        if self.scoutConfig.has_section('scout.ssh'):
+            sshArgs = dict(self.scoutConfig._sections['scout.ssh'])
+
         # Invoke paramiko to start building SSH client
         scoutSshClient = paramiko.SSHClient()
 
-        scoutSshClient.connect(host, port=port, username=username, password=password, **kwargs)
+        # Set host key policy according to SCOUTCONFIG
+        if self.scoutConfig.has_option('scout.paramiko', 'keyPolicy'):
+            if self.scoutConfig['scout.paramiko']['keyPolicy'] == "WarningPolicy":
+                scoutSshClient.set_missing_host_key_policy(paramiko.WarningPolicy())
+            elif self.scoutConfig['scout.paramiko']['keyPolicy'] == "AutoAddPolicy":
+                scoutSshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Initiate SSH client
+        scoutSshClient.connect(host, port=port, username=username, password=password, **sshArgs)
+        
         return scoutSshClient
 
     def list(self):
