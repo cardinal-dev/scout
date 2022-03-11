@@ -36,5 +36,6 @@ setup(name='scout',
       url='https://github.com/cardinal-dev/scout',
       packages=['scout'],
       install_requires=['paramiko', 'configparser', 'Jinja2'],
+      package_data={'scout': ['templates/*']},
       include_package_data=True
      )
