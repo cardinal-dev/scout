@@ -1,1 +1,11 @@
-include templates/*
+include *.in
+include *.md
+include *.txt
+include LICENSE
+recursive-include bin *.md
+recursive-include bin *.py
+recursive-include bin *.sh
+recursive-include ci *.config
+recursive-include ci *.sh
+recursive-include conf *.ini
+recursive-include docs *.license
