@@ -172,7 +172,9 @@ def getUptime(ip, username, password):
     return getApUptime
 
 def fetcher(ip, username, password):
-    """Function that fetches AP information over single SSH channel"""
+    '''
+    Function that fetches AP information over single SSH channel
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     jinjaEnv = scout.env.scoutJinjaEnv()
     cmdTemplate = jinjaEnv.get_template("scout_fetcher")
