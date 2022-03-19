@@ -27,21 +27,71 @@ SOFTWARE.
 '''
 
 import os
+import paramiko
 import jinja2
 from configparser import ConfigParser
 
-def scoutEnv():
-    scoutConfigFile = os.environ['SCOUTCONFIG']
-    scoutConfig = ConfigParser()
-    scoutConfig.read("{}".format(scoutConfigFile))
-    commandDebug = scoutConfig.get('scout', 'commandDebug')
-    return commandDebug
+class scoutEnv():
+    '''
+    Object that defines how scout ultimately behaves.
+    scoutEnv() will return a dict() with configuration
+    options, which will be ingested on execution.
+    '''
 
-def scoutJinjaEnv():
-    scoutConfigFile = os.environ['SCOUTCONFIG']
-    scoutConfig = ConfigParser()
-    scoutConfig.read("{}".format(scoutConfigFile))
-    commandDir = scoutConfig.get('scout', 'commandDir')
-    fileLoader = jinja2.FileSystemLoader('{}'.format(commandDir))
-    jinjaEnv = jinja2.Environment(loader=fileLoader, autoescape=True)
-    return jinjaEnv
+    def __init__(self):
+
+        # Ingest values from config file at SCOUTCONFIG
+        scoutConfigFile = os.environ['SCOUTCONFIG']
+        self.scoutConfig = ConfigParser()
+        self.scoutConfig.read(scoutConfigFile)
+
+        # Create dict() to hold tuning values
+        self.tunings = {}
+
+        # Establish default behavior. If values are not defined
+        # in SCOUTCONFIG, we'll try to handle accordingly.
+        if self.scoutConfig.has_option('scout', 'commandDir'):
+            self.tunings['commandDir'] = self.scoutConfig.get('scout', 'commandDir')
+        else:
+            self.tunings['commandDir'] = '/opt/scout/templates'
+
+        if self.scoutConfig.has_option('scout', 'commandDebug'):
+            self.tunings['commandDebug'] = self.scoutConfig.get('scout', 'commandDebug')
+        else:
+            self.tunings['commandDebug'] = 'off'
+
+        fileLoader = jinja2.FileSystemLoader(self.tunings['commandDir'])
+        # See: https://bandit.readthedocs.io/en/latest/plugins/b701_jinja2_autoescape_false.html
+        jinjaEnv = jinja2.Environment(loader=fileLoader, autoescape=True)
+
+        # Embed Jinja2 object into tunings dict()
+        self.tunings['jinjaEnv'] = jinjaEnv
+
+    def ssh(self, host, username, password, port, **sshArgs):
+        '''
+        Build SSH client using paramiko.
+        '''
+        # Look through SCOUTCONFIG and append any special args
+        if self.scoutConfig.has_section('scout.ssh'):
+            sshArgs = dict(self.scoutConfig._sections['scout.ssh'])
+
+        # Invoke paramiko to start building SSH client
+        scoutSshClient = paramiko.SSHClient()
+
+        # Set host key policy according to SCOUTCONFIG
+        if self.scoutConfig.has_option('scout.paramiko', 'keyPolicy'):
+            if self.scoutConfig['scout.paramiko']['keyPolicy'] == "WarningPolicy":
+                scoutSshClient.set_missing_host_key_policy(paramiko.WarningPolicy())
+            elif self.scoutConfig['scout.paramiko']['keyPolicy'] == "AutoAddPolicy":
+                scoutSshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Initiate SSH client
+        scoutSshClient.connect(host, port=port, username=username, password=password, **sshArgs)
+        
+        return scoutSshClient
+
+    def list(self):
+        '''
+        Return current configuration of scoutEnv
+        '''
+        return self.tunings
