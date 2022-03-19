@@ -44,7 +44,9 @@ def getArp(ip, username, password):
     return getArpTable
 
 def getSpeed(ip, username, password):
-    """Function that reports speed of Gi0/0 in Mbps."""
+    '''
+    Function that reports speed of Gi0/0 in Mbps.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("sho int gi0\n")
     sshOut = stdout.read()
@@ -54,7 +56,9 @@ def getSpeed(ip, username, password):
     return getBandwidth
 
 def getMac(ip, username, password):
-    """Function that reports back the MAC address of AP."""
+    '''
+    Function that reports back the MAC address of AP.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     macAddrRegex = re.compile(r'\w\w\w\w.\w\w\w\w.\w\w\w\w')
     stdin, stdout, stderr = scoutSshClient.exec_command("show int gi0\n")
@@ -80,7 +84,9 @@ def getClientCount(ip, username, password):
     return totalClients
 
 def getModel(ip, username, password):
-    """Function that reports the model ID of AP."""
+    '''
+    Function that reports the model ID of AP.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("show version\n")
     sshOut = stdout.read()
@@ -91,7 +97,9 @@ def getModel(ip, username, password):
     return getApModel
 
 def getHostname(ip, username, password):
-    """Function that retrieves AP hostname via show version."""
+    '''
+    Function that retrieves AP hostname via show version.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     jinjaEnv = scout.env.scoutJinjaEnv()
     cmdTemplate = jinjaEnv.get_template("scout_get_hostname")
@@ -106,7 +114,9 @@ def getHostname(ip, username, password):
     return getHostname
 
 def getLocation(ip, username, password):
-    """Function that retrieves AP location via show snmp location."""
+    '''
+    Function that retrieves AP location via show snmp location.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     jinjaEnv = scout.env.scoutJinjaEnv()
     cmdTemplate = jinjaEnv.get_template("scout_get_location")
@@ -123,7 +133,9 @@ def getLocation(ip, username, password):
     return location[4]
 
 def getUsers(ip, username, password):
-    """Function that retrieves AP users via show users."""
+    '''
+    Function that retrieves AP users via show users.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     jinjaEnv = scout.env.scoutJinjaEnv()
     cmdTemplate = jinjaEnv.get_template("scout_get_users")
@@ -143,7 +155,9 @@ def getUsers(ip, username, password):
     return "\n".join(getUsers)
 
 def getSerial(ip, username, password):
-    """Function that reports the serial number of AP."""
+    '''
+    Function that reports the serial number of AP.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("show inventory\n")
     sshOut = stdout.read()
@@ -154,7 +168,9 @@ def getSerial(ip, username, password):
     return getApSerial
 
 def getIosInfo(ip, username, password):
-    """Function that retrieves AP IOS info via show version."""
+    '''
+    Function that retrieves AP IOS info via show version.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("show version\n")
     sshOut = stdout.read().splitlines()
@@ -163,7 +179,9 @@ def getIosInfo(ip, username, password):
     return getIosInfo
 
 def getUptime(ip, username, password):
-    """Function that retrieves AP uptime via show version."""
+    '''
+    Function that retrieves AP uptime via show version.
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("show version\n")
     sshOut = stdout.read().splitlines()
@@ -194,10 +212,11 @@ def fetcher(ip, username, password):
     macAddrRegex = re.compile(r'\w\w\w\w.\w\w\w\w.\w\w\w\w')
     apModelRegex = re.compile(r'\w\w\w\-\w\w\w\w\w\w\w\w\-\w-\w\w')
     apSerialRegex = re.compile(r'\w\w\w\w\w\w\w\w\w\w\w')
+    apBandwidthRegex = re.compile(r'(10|100|1000)Mbps')
     # Append info to apInfo[]
     apMacAddr = macAddrRegex.search(sshData[4].split(',')[1]).group(0)
     apInfo.append(apMacAddr)
-    apBandwidth = sshData[3].split(",")[1]
+    apBandwidth = apBandwidthRegex.search(sshData[3]).group(0)
     apInfo.append(apBandwidth)
     apIosInfo = sshData[5].replace("\r", '').split("\n")[1]
     apInfo.append(apIosInfo)
@@ -215,7 +234,9 @@ def fetcher(ip, username, password):
     return apInfo
 
 def ping(ip, username, password):
-    """Function that performs a simple SSH session similar to ping"""
+    '''
+    Function that performs a simple SSH session similar to ping
+    '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     jinjaEnv = scout.env.scoutJinjaEnv()
     cmdTemplate = jinjaEnv.get_template("scout_ssh_ping")
