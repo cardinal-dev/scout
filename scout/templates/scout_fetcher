@@ -1,7 +1,7 @@
 enable
 {{ password }}
 terminal length 0
-show interface gi0 | i Mbps
+show interface gi0 | i bps
 show interface gi0 | i bia
 show version | i Cisco
 show version | i uptime
