@@ -46,12 +46,21 @@ def getArp(ip, username, password):
 def getSpeed(ip, username, password):
     '''
     Function that reports speed of Gi0/0 in Mbps.
+    it will also convert speed to Mbps if in Gbps
     '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("sho int gi0\n")
     sshOut = stdout.read()
     sshBandwidth = sshOut.decode('ascii').strip("\n").split(",")
-    getBandwidth = sshBandwidth[9].strip("Mbps")
+
+    if "Gbps" in sshBandwidth[10]:
+        getBandwidth = sshBandwidth[10].strip("Gbps")
+        getBandwidth += "000"
+    elif "Gbps" in sshBandwidth[9]:
+        getBandwidth = sshBandwidth[9].strip("Gbps")
+        getBandwidth += "000"
+    else:
+        getBandwidth = sshBandwidth[9].strip("Mbps")
     scoutSshClient.close()
     return getBandwidth
 
