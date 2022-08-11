@@ -50,19 +50,12 @@ def getSpeed(ip, username, password):
     '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("sho int gi0\n")
+    apBandwidthRegex = re.compile(r'(1|10|100|1000)(Gbps|Mbps)')
     sshOut = stdout.read()
-    sshBandwidth = sshOut.decode('ascii').strip("\n").split(",")
-
-    if "Gbps" in sshBandwidth[10]:
-        getBandwidth = sshBandwidth[10].strip("Gbps")
-        getBandwidth += "000"
-    elif "Gbps" in sshBandwidth[9]:
-        getBandwidth = sshBandwidth[9].strip("Gbps")
-        getBandwidth += "000"
-    else:
-        getBandwidth = sshBandwidth[9].strip("Mbps")
+    decoded = sshOut.decode('ascii').strip("\n")
+    bandwidth = apBandwidthRegex.search(decoded).group(0)
     scoutSshClient.close()
-    return getBandwidth
+    return bandwidth
 
 def getMac(ip, username, password):
     '''
