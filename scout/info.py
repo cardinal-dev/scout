@@ -46,14 +46,16 @@ def getArp(ip, username, password):
 def getSpeed(ip, username, password):
     '''
     Function that reports speed of Gi0/0 in Mbps.
+    it will also convert speed to Mbps if in Gbps
     '''
     scoutSshClient = scout.ssh.buildSshClient(ip=ip, username=username, password=password)
     stdin, stdout, stderr = scoutSshClient.exec_command("sho int gi0\n")
+    apBandwidthRegex = re.compile(r'(1|10|100|1000)(Gbps|Mbps)')
     sshOut = stdout.read()
-    sshBandwidth = sshOut.decode('ascii').strip("\n").split(",")
-    getBandwidth = sshBandwidth[9].strip("Mbps")
+    decoded = sshOut.decode('ascii').strip("\n")
+    bandwidth = apBandwidthRegex.search(decoded).group(0)
     scoutSshClient.close()
-    return getBandwidth
+    return bandwidth
 
 def getMac(ip, username, password):
     '''
@@ -212,7 +214,7 @@ def fetcher(ip, username, password):
     macAddrRegex = re.compile(r'\w\w\w\w.\w\w\w\w.\w\w\w\w')
     apModelRegex = re.compile(r'\w\w\w\-\w\w\w\w\w\w\w\w\-\w-\w\w')
     apSerialRegex = re.compile(r'\w\w\w\w\w\w\w\w\w\w\w')
-    apBandwidthRegex = re.compile(r'(10|100|1000)Mbps')
+    apBandwidthRegex = re.compile(r'(1|10|100|1000)(Gbps|Mbps)')
     # Append info to apInfo[]
     apMacAddr = macAddrRegex.search(sshData[4].split(',')[1]).group(0)
     apInfo.append(apMacAddr)
