@@ -2,7 +2,7 @@
 
 # MIT License
 
-# Copyright © 2019 Cardinal Contributors
+# Copyright © 2023 Cardinal Contributors
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-flake8
-paramiko
-jinja2
-bandit
-configparser
-pyinstaller
+flake8==4.0.1
+paramiko==2.9.2
+jinja2==3.0.3
+bandit==1.7.4
+configparser==5.2.0
+pyinstaller==4.10
