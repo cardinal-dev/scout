@@ -1,4 +1,3 @@
-[![Build Status](https://api.travis-ci.com/cardinal-dev/scout.svg?branch=main)](https://travis-ci.com/cardinal-dev/scout)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
 
 <h1>scout</h1>
@@ -7,6 +6,9 @@
 `scout` is the underlying logic that communicates with autonomous Cisco APs via SSH. The main component of `scout`
 is `paramiko`. `scout` is built on and requires Python3. `scout` and all other Cardinal components are tested
 against Python 3.6, 3.7, and 3.8.
+
+<h2>Deprecation Notice</h2>
+Starting April 9th, 2023, Cardinal development will no longer continue. If anyone wants to continue development, please feel free to fork this repo, along with the repo for scout. I'm going to merge all of the latest dependency PRs before archiving. The latest source code is essentially v3.0, with some things missing. Thank you to everyone who contributed over the years! Overall, I think I accomplished my goal of creating an open source Cisco access point controller.
 
 <h3>Example Usage:</h3>
 
@@ -22,19 +24,3 @@ Type "help", "copyright", "credits" or "license" for more information.
 
   Interface    User               Mode         Idle     Peer Address
 ~~~
-
-`scout` is a Python package that contains five modules:
-
-`ssh` builds the `paramiko` client based on information passed into `buildSshClient()`. `buildSshClient()` accepts
-three positional arguments: `ip`, `username`, and `password`.
-
-`env` contains the Jinja2 logic for building/running `scout` templates. Currently, all default `scout` templates can
-be found in `templates/`. `scout` can read a text file that has one IOS command per line. If desired, 
-the user can pass Jinja2 values to the templates in order to build complex command runs.
-
-`info` contains command functions that gather Cisco AP information, much like the commands a sysadmin
-would type at the Terminal.
-
-`sys` contains command functions that manipulate system settings.
-
-`ssid` contains command functions that create/delete SSIDs.
